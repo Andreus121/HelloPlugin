@@ -1,0 +1,6 @@
+name: HelloPlugin
+version: '${version}'
+
+main: cl.andreus.helloplugin.HelloPlugin
+api-version: '26.1.2'
+load: POSTWORLD

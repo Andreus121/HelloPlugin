@@ -9,6 +9,8 @@ public final class HelloPlugin extends JavaPlugin {
         //lógica cuando el plugin se inicia
         //registrar el comando
         registerCommand("hello", new Hello());
+        //registrar el listener
+        getServer().getPluginManager().registerEvents(new JoinListener(), this);
     }
 
     @Override

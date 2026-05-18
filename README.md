@@ -4,11 +4,12 @@ A simple Paper plugin that greets players with commands and a welcome title on j
 
 ## Commands
 
-| Command | Description |
-|---|---|
-| `/hello` | Greets you privately |
-| `/hello world` | Broadcasts your greetings to everyone |
-| `/hello <player>` | Sends greetings to a specific player |
+| Command           | Description                           | Permissions |
+|-------------------|---------------------------------------|-------------|
+| `/hello reload`   | reload the messages from config.yml   | op          |
+| `/hello`          | Greets you privately                  | user        |
+| `/hello world`    | Broadcasts your greetings to everyone | user        |
+| `/hello <player>` | Sends greetings to a specific player  | user        |
 
 ## Download
 

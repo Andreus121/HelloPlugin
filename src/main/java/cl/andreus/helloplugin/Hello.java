@@ -18,8 +18,16 @@ import java.util.ArrayList;
 
 @NullMarked
 public class Hello implements BasicCommand{
+    //guarda al padre para acceder a "config.yml"
+    private final HelloPlugin plugin;
 
-    //las cosas que muestra
+    //constructor
+    public Hello(HelloPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    //comandos del plugin
+    //las cosas que muestra al escribir el comando
     @Override
     public Collection<String> suggest(CommandSourceStack commandSourceStack, String[] args) {
         //sugerencias para el comando en la posición 1
@@ -27,7 +35,7 @@ public class Hello implements BasicCommand{
             //Collection de jugadores
             Collection<? extends Player> players = Bukkit.getOnlinePlayers();
             //crear una lista de strings con "world"
-            List<String> optionsList = new ArrayList<String>(List.of("world"));
+            List<String> optionsList = new ArrayList<String>(List.of("world","reload"));
             //a la lista añadirle como strings los nombres de todos los jugadores conectados
             for(Player p: players){
                 optionsList.add(p.getName());
@@ -48,20 +56,34 @@ public class Hello implements BasicCommand{
         //verificar que fue un jugador
         if (!(executor instanceof Player player)) {
             //si no fue un jugador fue la consola u otra cosa
-            sender.sendPlainMessage("Solo los jugadores pueden saludar!");
+            //toma el mensaje de config.yml o si no existe el mensaje, muestra el mensaje por defecto
+            String message = plugin.getConfig().getString("messages.not-player","Solo los jugadores pueden saludar!");
+            sender.sendPlainMessage(message);
             return;
         }
         //solo usó /hello
         if (args.length == 0) {
-            sender.sendPlainMessage("Hola " + player.getName() + "! Que gusto verte por aquí!");
+            //toma el mensaje de config.yml o si no existe el mensaje, muestra el mensaje por defecto
+            String message = plugin.getConfig().getString("messages.hello","Que gusto verte de nuevo {player}!");
+            message = message.replace("{player}",player.getName());
+            sender.sendPlainMessage(message);
             return;
+        }
+        else if (args[0].equalsIgnoreCase("reload")) {
+            //recargar el config.yml
+            plugin.reloadConfig();
+            //toma el mensaje de config.yml o si no existe el mensaje, muestra el mensaje por defecto
+            String message = plugin.getConfig().getString("messages.reload","El config se ha recargado!");
+            sender.sendPlainMessage(message);
         }
         //si usa /hello world
         else if (args[0].equalsIgnoreCase("world")) {
+            //toma el mensaje de config.yml o si no existe el mensaje, muestra el mensaje por defecto
+            String message = plugin.getConfig().getString("messages.hello-world", "{player} le manda saludos a todos!");
+            message = message.replace("{player}", player.getName());
+
             //crear el componente
-            Component broadcastMessage = MiniMessage.miniMessage().deserialize(
-                    player.getName() + " le manda saludos a todos en el servidor!"
-            );
+            Component broadcastMessage = MiniMessage.miniMessage().deserialize(message);
             //mostrarlo a todos
             Bukkit.broadcast(broadcastMessage);
         }
@@ -71,16 +93,17 @@ public class Hello implements BasicCommand{
             Player objective = Bukkit.getPlayer(args[0]);
             //ver si el jugador está conectado
             if (objective == null) {
-                sender.sendPlainMessage("el jugador no está conectado!");
+                //toma el mensaje de config.yml o si no existe el mensaje, muestra el mensaje por defecto
+                String message = plugin.getConfig().getString("messages.offline","El jugador no esta conectado!");
+                message = message.replace("{player}",player.getName());
+                sender.sendPlainMessage(message);
                 return;
             }
-            //si se manda un mensaje a si mismo
-            if(objective == player){
-                sender.sendPlainMessage("hola de parte de... ti mismo?");
-                return;
-            }
+            //toma el mensaje de config.yml o si no existe el mensaje, muestra el mensaje por defecto
+            String message = plugin.getConfig().getString("messages.hello-player","{player} te manda saludos!");
+            message = message.replace("{player}",player.getName());
             //mandarle el mensaje al jugador
-            objective.sendPlainMessage(player.getName() + " te manda saludos!");
+            objective.sendPlainMessage(message);
         }
 
         //fin de la función

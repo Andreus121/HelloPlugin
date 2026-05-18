@@ -9,14 +9,22 @@ import org.bukkit.entity.Player;
 import net.kyori.adventure.text.Component;
 
 public class JoinListener implements Listener{
+    private final HelloPlugin plugin;
+
+    public JoinListener(HelloPlugin plugin){
+        this.plugin = plugin;
+    }
 
     //cuando se detecte un jugador conectándose al sv
     @EventHandler
     public void playerJoin(PlayerJoinEvent event) {
         //guardar al jugador que se conectó
         Player player = event.getPlayer();
+        //tomar el mensaje de "config.yml"
+        String message = plugin.getConfig().getString("messages.join","Bienvenido {player}!");
+        message = message.replace("{player}",player.getName());
         //crear el mensaje
-        final Component mainTitle = Component.text("Que gusto verte de nuevo "+player.getName()+"!", NamedTextColor.BLUE);
+        final Component mainTitle = Component.text(message, NamedTextColor.BLUE);
         //crear el "título" que muestra el mensaje sin subtítulo
         final Title title = Title.title(mainTitle,Component.empty());
 

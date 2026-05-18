@@ -1,0 +1,8 @@
+messages:
+  reload: "El config se ha recargado!"
+  hello: "Que gusto verte de nuevo {player}!"
+  hello-world: "{player} le manda saludos a todos!"
+  hello-player: "{player} te manda saludos!"
+  join: "Bienvenido {player}!"
+  not-player: "Solo los jugadores pueden saludar!"
+  offline: "El jugador no esta conectado!"

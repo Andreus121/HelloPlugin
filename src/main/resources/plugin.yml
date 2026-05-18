@@ -4,3 +4,17 @@ version: '${version}'
 main: cl.andreus.helloplugin.HelloPlugin
 api-version: '26.1.2'
 load: POSTWORLD
+
+permissions:
+  helloplugin.hello:
+    description: Permite usar /hello
+    default: true
+  helloplugin.hello.world:
+    description: Permite usar /hello world
+    default: true
+  helloplugin.hello.player:
+    description: Permite saludar a otro jugador con /hello <jugador>
+    default: true
+  helloplugin.reload:
+    description: Permite recargar la configuración
+    default: op

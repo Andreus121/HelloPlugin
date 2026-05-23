@@ -15,11 +15,15 @@ import org.bukkit.Bukkit;
 import java.util.Collection;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.UUID;
+import java.util.HashMap;
 
 @NullMarked
 public class Hello implements BasicCommand{
     //guarda al padre para acceder a "config.yml"
     private final HelloPlugin plugin;
+    //HasMap para los cooldowns de //hello world
+    private final HashMap<UUID, Long> cooldowns = new HashMap<>();
 
     //constructor
     public Hello(HelloPlugin plugin) {
@@ -61,6 +65,7 @@ public class Hello implements BasicCommand{
             sender.sendPlainMessage(message);
             return;
         }
+
         //solo usó /hello
         if (args.length == 0) {
             //toma el mensaje de config.yml o si no existe el mensaje, muestra el mensaje por defecto
@@ -69,6 +74,8 @@ public class Hello implements BasicCommand{
             sender.sendPlainMessage(message);
             return;
         }
+
+        //va a recargar la configuración, usó /hello reload
         else if (args[0].equalsIgnoreCase("reload")) {
             //recargar el config.yml
             plugin.reloadConfig();
@@ -76,18 +83,37 @@ public class Hello implements BasicCommand{
             String message = plugin.getConfig().getString("messages.reload","El config se ha recargado!");
             sender.sendPlainMessage(message);
         }
-        //si usa /hello world
+
+        //usó /hello world
         else if (args[0].equalsIgnoreCase("world")) {
+            //calcular los cooldowns
+            long currentTime = System.currentTimeMillis();//tiempo actual
+            long cooldownTime = plugin.getConfig().getLong("cooldown.hello-world", 5000);//cooldown 5 segundos
+
+            if (cooldowns.containsKey(player.getUniqueId())) {//si el jugador ya ha usado el comando antes
+                long lastUsed = cooldowns.get(player.getUniqueId());//ultima vez que usó el comando
+                if (currentTime - lastUsed < cooldownTime){//debe esperar más para ejecutar el comando
+                    //toma el mensaje de config.yml o si no existe el mensaje, muestra el mensaje por defecto
+                    String message = plugin.getConfig().getString("messages.hello-world-cooldown", "Debes esperar {cooldown} segundos para usar este comando de nuevo!");
+                    int secondsLeft = (int) ((cooldownTime - (currentTime - lastUsed)) / 1000);
+                    message = message.replace("{cooldown}", String.valueOf(secondsLeft));
+                    sender.sendPlainMessage(message);
+                    return;
+                }
+            }
+            //ya pasó el cooldown establecido
+            //guarda el tiempo actual
+            cooldowns.put(player.getUniqueId(), currentTime);
             //toma el mensaje de config.yml o si no existe el mensaje, muestra el mensaje por defecto
             String message = plugin.getConfig().getString("messages.hello-world", "{player} le manda saludos a todos!");
             message = message.replace("{player}", player.getName());
-
             //crear el componente
             Component broadcastMessage = MiniMessage.miniMessage().deserialize(message);
             //mostrarlo a todos
             Bukkit.broadcast(broadcastMessage);
         }
-        //usa /hello <jugador>
+
+        //usó /hello <jugador>
         else{
             //buscar al jugador
             Player objective = Bukkit.getPlayer(args[0]);

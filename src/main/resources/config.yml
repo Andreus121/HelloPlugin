@@ -2,7 +2,10 @@ messages:
   reload: "El config se ha recargado!"
   hello: "Que gusto verte de nuevo {player}!"
   hello-world: "{player} le manda saludos a todos!"
+  hello-world-cooldown: "Debes esperar {cooldown} segundos para usar este comando de nuevo!"
   hello-player: "{player} te manda saludos!"
   join: "Bienvenido {player}!"
   not-player: "Solo los jugadores pueden saludar!"
   offline: "El jugador no esta conectado!"
+cooldown:
+    hello-world: 5000 #milliseconds

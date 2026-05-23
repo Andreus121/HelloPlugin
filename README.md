@@ -11,6 +11,27 @@ A simple Paper plugin that greets players with commands and a welcome title on j
 | `/hello world`    | Broadcasts your greetings to everyone | user        |
 | `/hello <player>` | Sends greetings to a specific player  | user        |
 
+## Configuration
+
+After the first run, a `config.yml` will be generated in `plugins/HelloPlugin/`.
+
+```yaml
+messages:
+  reload: "El config se ha recargado!"
+  hello: "Que gusto verte de nuevo {player}!"
+  hello-world: "{player} le manda saludos a todos!"
+  hello-world-cooldown: "Debes esperar {cooldown} segundos para usar este comando de nuevo!"
+  hello-player: "{player} te manda saludos!"
+  join: "Bienvenido {player}!"
+  not-player: "Solo los jugadores pueden saludar!"
+  offline: "El jugador no esta conectado!"
+
+cooldown:
+  hello-world: 5000 #milliseconds
+```
+
+> When updating from a previous version, delete your `config.yml` and restart to generate the new default configuration.
+
 ## Download
 
 Go to the [Releases](../../releases/latest) page and download the latest `.jar`.

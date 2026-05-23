@@ -30,7 +30,7 @@ cooldown:
   hello-world: 5000 #milliseconds
 ```
 
-> When updating from a previous version, delete your `config.yml` and restart to generate the new default configuration.
+> When updating from a previous version, only change the .jar for the new version. The config will be updated automatically with any new messages or cooldowns, while keeping your custom messages and cooldown values.
 
 ## Download
 
